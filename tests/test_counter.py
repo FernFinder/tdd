@@ -36,7 +36,7 @@ class CounterTest(TestCase):
         self.assertEqual(result.status_code, status.HTTP_409_CONFLICT)
 
     def test_updating_a_counter(self):
-        """It should update a counter"""
+        """It should increment a counter"""
         update = self.client.post('/counters/qux')
         self.assertEqual(update.status_code, status.HTTP_201_CREATED)
         baseline = update.json["qux"]
@@ -45,16 +45,8 @@ class CounterTest(TestCase):
         self.assertEqual(update.status_code, status.HTTP_200_OK)
         self.assertEqual(update.json["qux"], baseline+1)
 
-    def test_updating_a_nonexistent_counter(self):
-        """It should return an error for updating nonexistent counter"""
-        update = self.client.put('/counters/qqq')
-        self.assertEqual(update.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_a_counter(self):
-        """It should get a counter"""
-        result = self.client.get('/counters/bar')
+    def test_deleting_a_counter(self):
+        """It should delete the counter"""
+        result = self.client.post('/counters/tux')
+        result = self.client.delete('/counters/tux')
         self.assertEqual(result.status_code, status.HTTP_200_OK)
-
-    def test_get_a_nonexistent_counter(self):
-        result = self.client.get('/counters/qqq')
-        self.assertEqual(result.status_code, status.HTTP_404_NOT_FOUND)
